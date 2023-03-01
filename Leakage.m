@@ -1,6 +1,5 @@
 function L = ...
     Leakage(w01, w12, w, T, tstep, SignalString, Theta)
-
 N = length(SignalString);
 h = 1.054e-34; % Planck constant
 C1 = 1e-12; % Qubit capacitance
@@ -33,6 +32,11 @@ InitStates = ...
 % Different i.c. leakage arrays
 Leak1 = zeros(1,N); Leak2 = zeros(1,N); Leak3 = zeros(1,N); 
 Leak4 = zeros(1,N); Leak5 = zeros(1,N); Leak6 = zeros(1,N);
+
+% Different i.c. vector arrays
+WFvector1 = zeros(3,N); WFvector2 = zeros(3,N);
+WFvector3 = zeros(3,N); WFvector4 = zeros(3,N);
+WFvector5 = zeros(3,N); WFvector6 = zeros(3,N);
 
 % Hamiltonians
 % Disturbed hamiltonian
@@ -93,20 +97,46 @@ for IS = 1:1:6
         Prob1(j) = abs(ctranspose(WF0)*WF)^2;
         Prob2(j) = abs(ctranspose(WF1)*WF)^2;
         Prob3(j) = abs(ctranspose(WF2)*WF)^2;
+        switch IS
+            case 1
+                WFvector1(:,j) = WF;
+            case 2
+                WFvector2(:,j) = WF;
+            case 3
+                WFvector3(:,j) = WF;
+            case 4
+                WFvector4(:,j) = WF;
+            case 5
+                WFvector5(:,j) = WF;
+            case 6
+                WFvector6(:,j) = WF;
+        end
     end   
     switch IS
         case 1
             Leak1 = Prob3;
+            disp(['WF1 = (', num2str(WFvector1(1,N)),', ', ...
+                num2str(WFvector1(2,N)),', ',num2str(WFvector1(3,N)), ')']);
         case 2
             Leak2 = Prob3;
+            disp(['WF2 = (', num2str(WFvector2(1,N)),', ', ...
+                num2str(WFvector2(2,N)),', ',num2str(WFvector2(3,N)), ')']);
         case 3
             Leak3 = Prob3;
+            disp(['WF3 = (', num2str(WFvector3(1,N)),', ', ...
+                num2str(WFvector3(2,N)),', ',num2str(WFvector3(3,N)), ')']);
         case 4
             Leak4 = Prob3;
+            disp(['WF4 = (', num2str(WFvector4(1,N)),', ', ...
+                num2str(WFvector4(2,N)),', ',num2str(WFvector4(3,N)), ')']);
         case 5
             Leak5 = Prob3;
+            disp(['WF5 = (', num2str(WFvector5(1,N)),', ', ...
+                num2str(WFvector5(2,N)),', ',num2str(WFvector5(3,N)), ')']);
         case 6
             Leak6 = Prob3;
+            disp(['WF6 = (', num2str(WFvector6(1,N)),', ', ...
+                num2str(WFvector6(2,N)),', ',num2str(WFvector6(3,N)), ')']);
     end
 end
 L = 1/6*(Leak1(N) + Leak2(N) + Leak3(N) + Leak4(N) + Leak5(N) + Leak6(N));
